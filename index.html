@@ -109,6 +109,16 @@
             justify-content: center;
             position: relative;
             color: white;
+            overflow: hidden;
+        }
+
+        /* Hero decorative shapes */
+        .hero-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            pointer-events: none;
         }
 
         /* Animations */
@@ -118,11 +128,15 @@
         }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-12px); }
         }
         @keyframes pulse-glow {
             0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
-            50% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
+            50% { box-shadow: 0 0 0 18px rgba(212, 175, 55, 0); }
+        }
+        @keyframes borderGlow {
+            0%, 100% { border-color: rgba(212, 175, 55, 0.2); }
+            50% { border-color: rgba(212, 175, 55, 0.6); }
         }
 
         .animate-fade-in-up {
@@ -147,17 +161,34 @@
         /* Cards */
         .course-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .course-card:hover::before {
+            opacity: 1;
         }
         .course-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.2);
         }
 
         /* Nav */
         .nav-scrolled {
-            background-color: rgba(15, 23, 42, 0.97);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+            background-color: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.2);
         }
 
         /* Form */
@@ -169,12 +200,15 @@
             border-color: var(--gold);
             outline: none;
             box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15);
+            transform: scale(1.01);
         }
 
         /* Mobile Menu */
         .mobile-menu {
             transform: translateX(100%);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
         .mobile-menu.open {
             transform: translateX(0);
@@ -183,20 +217,25 @@
         /* Testimonials */
         .testimonial-slide {
             display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
         .testimonial-slide.active {
             display: block;
-            animation: fadeInUp 0.5s ease-out;
+            animation: fadeInUp 0.6s ease-out forwards;
         }
 
         /* Accordion */
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.35s ease-out;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .accordion-content.open {
             max-height: 600px;
+        }
+        .accordion-trigger:hover {
+            background-color: rgba(212, 175, 55, 0.08);
         }
 
         /* Progress Bars */
@@ -211,6 +250,10 @@
             right: 25px;
             z-index: 50;
             animation: pulse-glow 2.5s infinite;
+            transition: transform 0.3s ease;
+        }
+        .sticky-cta:hover {
+            transform: scale(1.1);
         }
 
         /* Exam Badge */
@@ -257,6 +300,42 @@
         .float-shape {
             animation: float 6s ease-in-out infinite;
         }
+
+        /* Logo hover */
+        .nav-logo-img {
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .nav-logo-img:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
+        }
+
+        /* Hero visual card */
+        .hero-card {
+            animation: borderGlow 3s ease-in-out infinite;
+            transition: transform 0.3s ease;
+        }
+        .hero-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Stat cards */
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+        }
+
+        /* Social icons in footer */
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        .social-icon:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+        }
     </style>
 </head>
 <body class="font-sans bg-cream">
@@ -265,28 +344,28 @@
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent text-white py-4">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <a href="#" class="text-2xl font-serif font-bold flex items-center gap-3">
-                <img src="image.png" alt="Logo" class="w-10 h-10 object-contain rounded-lg">
+                <img src="image.png" alt="Logo" class="w-10 h-10 object-contain rounded-lg nav-logo-img">
                 <span>Mohammed English Academy</span>
             </a>
 
             <!-- Desktop Menu -->
             <div class="hidden lg:flex items-center gap-8 text-sm font-medium">
-                <a href="#home" class="hover:text-gold transition-colors" data-lang="en">Home</a>
+                <a href="#home" class="hover:text-gold transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-gold after:transition-all hover:after:w-full" data-lang="en">Home</a>
                 <a href="#home" class="hover:text-gold transition-colors hidden" data-lang="tr">Ana Sayfa</a>
                 
-                <a href="#about" class="hover:text-gold transition-colors" data-lang="en">About</a>
+                <a href="#about" class="hover:text-gold transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-gold after:transition-all hover:after:w-full" data-lang="en">About</a>
                 <a href="#about" class="hover:text-gold transition-colors hidden" data-lang="tr">Hakkımda</a>
                 
-                <a href="#courses" class="hover:text-gold transition-colors" data-lang="en">Courses</a>
+                <a href="#courses" class="hover:text-gold transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-gold after:transition-all hover:after:w-full" data-lang="en">Courses</a>
                 <a href="#courses" class="hover:text-gold transition-colors hidden" data-lang="tr">Kurslar</a>
                 
-                <a href="#exams" class="hover:text-gold transition-colors" data-lang="en">Exams</a>
+                <a href="#exams" class="hover:text-gold transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-gold after:transition-all hover:after:w-full" data-lang="en">Exams</a>
                 <a href="#exams" class="hover:text-gold transition-colors hidden" data-lang="tr">Sınavlar</a>
                 
-                <a href="#results" class="hover:text-gold transition-colors" data-lang="en">Results</a>
+                <a href="#results" class="hover:text-gold transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-gold after:transition-all hover:after:w-full" data-lang="en">Results</a>
                 <a href="#results" class="hover:text-gold transition-colors hidden" data-lang="tr">Sonuçlar</a>
                 
-                <a href="#contact" class="hover:text-gold transition-colors" data-lang="en">Contact</a>
+                <a href="#contact" class="hover:text-gold transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-gold after:transition-all hover:after:w-full" data-lang="en">Contact</a>
                 <a href="#contact" class="hover:text-gold transition-colors hidden" data-lang="tr">İletişim</a>
             </div>
 
@@ -296,52 +375,56 @@
                     <button onclick="setLanguage('tr')" id="btn-tr" class="lang-btn px-4 py-1.5 rounded-full text-sm">TR</button>
                 </div>
                 
-                <a href="#booking" class="bg-gold text-navy px-6 py-2.5 rounded-full font-bold hover:bg-white transition-all transform hover:scale-105 text-sm" data-lang="en">
+                <a href="#booking" class="bg-gold text-navy px-6 py-2.5 rounded-full font-bold hover:bg-white transition-all transform hover:scale-105 hover:shadow-lg text-sm" data-lang="en">
                     Book a Free Trial
                 </a>
-                <a href="#booking" class="bg-gold text-navy px-6 py-2.5 rounded-full font-bold hover:bg-white transition-all transform hover:scale-105 text-sm hidden" data-lang="tr">
+                <a href="#booking" class="bg-gold text-navy px-6 py-2.5 rounded-full font-bold hover:bg-white transition-all transform hover:scale-105 hover:shadow-lg text-sm hidden" data-lang="tr">
                     Ücretsiz Deneme Al
                 </a>
             </div>
 
-            <button onclick="toggleMobileMenu()" class="lg:hidden text-2xl">
+            <button onclick="toggleMobileMenu()" class="lg:hidden text-2xl hover:text-gold transition-colors">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-80 h-full bg-navy z-50 p-8 shadow-2xl lg:hidden overflow-y-auto">
-            <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 text-white text-2xl">
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-80 h-full bg-navy/95 z-50 p-8 shadow-2xl lg:hidden overflow-y-auto">
+            <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 text-white text-2xl hover:text-gold transition-colors">
                 <i class="fas fa-times"></i>
             </button>
             
-            <div class="flex flex-col gap-6 mt-16 text-white">
-                <a href="#home" onclick="toggleMobileMenu()" data-lang="en">Home</a>
-                <a href="#home" onclick="toggleMobileMenu()" class="hidden" data-lang="tr">Ana Sayfa</a>
-                <a href="#about" onclick="toggleMobileMenu()" data-lang="en">About</a>
-                <a href="#about" onclick="toggleMobileMenu()" class="hidden" data-lang="tr">Hakkımda</a>
-                <a href="#courses" onclick="toggleMobileMenu()" data-lang="en">Courses</a>
-                <a href="#courses" onclick="toggleMobileMenu()" class="hidden" data-lang="tr">Kurslar</a>
-                <a href="#exams" onclick="toggleMobileMenu()" data-lang="en">Exams</a>
-                <a href="#exams" onclick="toggleMobileMenu()" class="hidden" data-lang="tr">Sınavlar</a>
-                <a href="#results" onclick="toggleMobileMenu()" data-lang="en">Results</a>
-                <a href="#results" onclick="toggleMobileMenu()" class="hidden" data-lang="tr">Sonuçlar</a>
-                <a href="#contact" onclick="toggleMobileMenu()" data-lang="en">Contact</a>
-                <a href="#contact" onclick="toggleMobileMenu()" class="hidden" data-lang="tr">İletişim</a>
+            <div class="flex flex-col gap-6 mt-16 text-white text-lg">
+                <a href="#home" onclick="toggleMobileMenu()" class="hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="en">Home</a>
+                <a href="#home" onclick="toggleMobileMenu()" class="hidden hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="tr">Ana Sayfa</a>
+                <a href="#about" onclick="toggleMobileMenu()" class="hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="en">About</a>
+                <a href="#about" onclick="toggleMobileMenu()" class="hidden hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="tr">Hakkımda</a>
+                <a href="#courses" onclick="toggleMobileMenu()" class="hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="en">Courses</a>
+                <a href="#courses" onclick="toggleMobileMenu()" class="hidden hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="tr">Kurslar</a>
+                <a href="#exams" onclick="toggleMobileMenu()" class="hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="en">Exams</a>
+                <a href="#exams" onclick="toggleMobileMenu()" class="hidden hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="tr">Sınavlar</a>
+                <a href="#results" onclick="toggleMobileMenu()" class="hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="en">Results</a>
+                <a href="#results" onclick="toggleMobileMenu()" class="hidden hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="tr">Sonuçlar</a>
+                <a href="#contact" onclick="toggleMobileMenu()" class="hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="en">Contact</a>
+                <a href="#contact" onclick="toggleMobileMenu()" class="hidden hover:text-gold transition-colors border-b border-white/10 pb-2" data-lang="tr">İletişim</a>
 
                 <div class="flex gap-3 mt-4">
-                    <button onclick="setLanguage('en'); toggleMobileMenu()" class="lang-btn active flex-1 px-4 py-2 rounded-lg bg-white/10 text-center">English</button>
-                    <button onclick="setLanguage('tr'); toggleMobileMenu()" class="lang-btn flex-1 px-4 py-2 rounded-lg bg-white/10 text-center">Türkçe</button>
+                    <button onclick="setLanguage('en'); toggleMobileMenu()" class="lang-btn active flex-1 px-4 py-2 rounded-lg bg-white/10 text-center hover:bg-gold hover:text-navy transition-colors">English</button>
+                    <button onclick="setLanguage('tr'); toggleMobileMenu()" class="lang-btn flex-1 px-4 py-2 rounded-lg bg-white/10 text-center hover:bg-gold hover:text-navy transition-colors">Türkçe</button>
                 </div>
                 
-                <a href="#booking" onclick="toggleMobileMenu()" class="bg-gold text-navy px-6 py-3 rounded-full font-bold text-center mt-4" data-lang="en">Book Free Trial Class</a>
-                <a href="#booking" onclick="toggleMobileMenu()" class="bg-gold text-navy px-6 py-3 rounded-full font-bold text-center mt-4 hidden" data-lang="tr">Ücretsiz Deneme Dersi Al</a>
+                <a href="#booking" onclick="toggleMobileMenu()" class="bg-gold text-navy px-6 py-3 rounded-full font-bold text-center mt-4 hover:bg-white transition-colors" data-lang="en">Book Free Trial Class</a>
+                <a href="#booking" onclick="toggleMobileMenu()" class="bg-gold text-navy px-6 py-3 rounded-full font-bold text-center mt-4 hidden hover:bg-white transition-colors" data-lang="tr">Ücretsiz Deneme Dersi Al</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="hero-section relative">
+        <!-- Decorative shapes -->
+        <div class="hero-shape w-96 h-96 bg-gold top-[-100px] right-[-100px]"></div>
+        <div class="hero-shape w-64 h-64 bg-blue-500 bottom-[-50px] left-[-50px]"></div>
+
         <div class="container mx-auto px-6 relative z-10">
             <div class="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
                 <div>
@@ -362,11 +445,11 @@
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-4 mb-10 animate-fade-in-up delay-300">
-                        <a href="#booking" class="bg-gold text-navy px-8 py-4 rounded-full font-bold text-lg hover:bg-white transition-all transform hover:scale-105 shadow-lg text-center">
+                        <a href="#booking" class="bg-gold text-navy px-8 py-4 rounded-full font-bold text-lg hover:bg-white transition-all transform hover:scale-105 hover:shadow-2xl shadow-lg text-center">
                             <span data-lang="en">Start Free Trial</span>
                             <span data-lang="tr" class="hidden">Ücretsiz Deneme Başlat</span>
                         </a>
-                        <a href="#courses" class="border-2 border-white/30 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-navy transition-all text-center">
+                        <a href="#courses" class="border-2 border-white/30 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-navy transition-all hover:shadow-xl text-center backdrop-blur-sm">
                             <span data-lang="en">Explore Courses</span>
                             <span data-lang="tr" class="hidden">Kursları Keşfet</span>
                         </a>
@@ -374,17 +457,17 @@
 
                     <!-- Trust badges -->
                     <div class="flex flex-wrap items-center gap-6 animate-fade-in-up delay-400">
-                        <div class="flex items-center gap-2 text-sm text-gray-300">
+                        <div class="flex items-center gap-2 text-sm text-gray-300 bg-white/5 px-3 py-1.5 rounded-full backdrop-blur-sm">
                             <i class="fas fa-check-circle text-gold"></i>
                             <span data-lang="en">500+ Students</span>
                             <span data-lang="tr" class="hidden">500+ Öğrenci</span>
                         </div>
-                        <div class="flex items-center gap-2 text-sm text-gray-300">
+                        <div class="flex items-center gap-2 text-sm text-gray-300 bg-white/5 px-3 py-1.5 rounded-full backdrop-blur-sm">
                             <i class="fas fa-check-circle text-gold"></i>
                             <span data-lang="en">Online & In-Person</span>
                             <span data-lang="tr" class="hidden">Online & Yüz Yüze</span>
                         </div>
-                        <div class="flex items-center gap-2 text-sm text-gray-300">
+                        <div class="flex items-center gap-2 text-sm text-gray-300 bg-white/5 px-3 py-1.5 rounded-full backdrop-blur-sm">
                             <i class="fas fa-check-circle text-gold"></i>
                             <span data-lang="en">95% Pass Rate</span>
                             <span data-lang="tr" class="hidden">%95 Başarı Oranı</span>
@@ -397,12 +480,12 @@
                     <div class="absolute -top-10 -right-10 w-72 h-72 bg-gold/20 rounded-full blur-3xl"></div>
                     <div class="absolute -bottom-10 -left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
                     
-                    <div class="relative bg-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/10">
+                    <div class="hero-card relative bg-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/10 hover:border-gold/40 transition-all duration-500">
                         <div class="flex items-center gap-4 mb-6">
                             <img src="image copy.png" 
-                                 alt="Mohammed" class="w-16 h-16 rounded-full object-cover border-2 border-gold">
+                                 alt="Mohammed" class="w-16 h-16 rounded-full object-cover border-2 border-gold shadow-lg">
                             <div>
-                                <div class="font-bold text-white">Mohammed</div>
+                                <div class="font-bold text-white text-lg">Mohammed</div>
                                 <div class="text-gold text-sm" data-lang="en">Expert English Teacher</div>
                                 <div class="text-gold text-sm hidden" data-lang="tr">Uzman İngilizce Öğretmeni</div>
                             </div>
@@ -410,43 +493,43 @@
                         
                         <!-- Live stats -->
                         <div class="space-y-4">
-                            <div class="bg-white/10 rounded-xl p-4">
+                            <div class="bg-white/10 rounded-xl p-4 hover:bg-white/15 transition-colors">
                                 <div class="flex justify-between items-center mb-2">
                                     <span class="text-sm text-gray-300" data-lang="en">IELTS Average Score</span>
                                     <span class="text-sm text-gray-300 hidden" data-lang="tr">IELTS Ortalama Puan</span>
                                     <span class="text-gold font-bold">7.5</span>
                                 </div>
                                 <div class="w-full bg-white/10 rounded-full h-2">
-                                    <div class="bg-gold h-2 rounded-full" style="width: 85%"></div>
+                                    <div class="bg-gradient-to-r from-gold to-yellow-400 h-2 rounded-full" style="width: 85%"></div>
                                 </div>
                             </div>
-                            <div class="bg-white/10 rounded-xl p-4">
+                            <div class="bg-white/10 rounded-xl p-4 hover:bg-white/15 transition-colors">
                                 <div class="flex justify-between items-center mb-2">
                                     <span class="text-sm text-gray-300" data-lang="en">TOEFL Average Score</span>
                                     <span class="text-sm text-gray-300 hidden" data-lang="tr">TOEFL Ortalama Puan</span>
                                     <span class="text-gold font-bold">105</span>
                                 </div>
                                 <div class="w-full bg-white/10 rounded-full h-2">
-                                    <div class="bg-gold h-2 rounded-full" style="width: 88%"></div>
+                                    <div class="bg-gradient-to-r from-gold to-yellow-400 h-2 rounded-full" style="width: 88%"></div>
                                 </div>
                             </div>
-                            <div class="bg-white/10 rounded-xl p-4">
+                            <div class="bg-white/10 rounded-xl p-4 hover:bg-white/15 transition-colors">
                                 <div class="flex justify-between items-center mb-2">
                                     <span class="text-sm text-gray-300" data-lang="en">YDS Average Score</span>
                                     <span class="text-sm text-gray-300 hidden" data-lang="tr">YDS Ortalama Puan</span>
                                     <span class="text-gold font-bold">85+</span>
                                 </div>
                                 <div class="w-full bg-white/10 rounded-full h-2">
-                                    <div class="bg-gold h-2 rounded-full" style="width: 90%"></div>
+                                    <div class="bg-gradient-to-r from-gold to-yellow-400 h-2 rounded-full" style="width: 90%"></div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mt-6 flex items-center gap-3">
                             <div class="flex -space-x-2">
-                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop" class="w-8 h-8 rounded-full border-2 border-navy object-cover">
-                                <img src="image copy.png" class="w-8 h-8 rounded-full border-2 border-navy object-cover">
-                                <img src="r.jpg" class="w-8 h-8 rounded-full border-2 border-navy object-cover">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop" class="w-8 h-8 rounded-full border-2 border-navy object-cover ring-2 ring-gold/30">
+                                <img src="image copy.png" class="w-8 h-8 rounded-full border-2 border-navy object-cover ring-2 ring-gold/30">
+                                <img src="r.jpg" class="w-8 h-8 rounded-full border-2 border-navy object-cover ring-2 ring-gold/30">
                             </div>
                             <span class="text-sm text-gray-300">
                                 <span data-lang="en">Join 500+ successful students</span>
@@ -459,27 +542,27 @@
         </div>
 
         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <i class="fas fa-chevron-down text-white/50 text-2xl"></i>
+            <i class="fas fa-chevron-down text-white/50 text-2xl hover:text-gold transition-colors cursor-pointer"></i>
         </div>
     </section>
 
     <!-- Exam Logos Strip -->
     <section class="py-8 bg-white border-b border-gray-100">
         <div class="container mx-auto px-6">
-            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60">
-                <div class="flex items-center gap-2 font-serif font-bold text-navy text-xl">
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-70 hover:opacity-100 transition-opacity">
+                <div class="flex items-center gap-2 font-serif font-bold text-navy text-xl hover:text-gold transition-colors">
                     <i class="fas fa-certificate text-gold"></i> IELTS
                 </div>
-                <div class="flex items-center gap-2 font-serif font-bold text-navy text-xl">
+                <div class="flex items-center gap-2 font-serif font-bold text-navy text-xl hover:text-gold transition-colors">
                     <i class="fas fa-certificate text-gold"></i> TOEFL
                 </div>
-                <div class="flex items-center gap-2 font-serif font-bold text-navy text-xl">
+                <div class="flex items-center gap-2 font-serif font-bold text-navy text-xl hover:text-gold transition-colors">
                     <i class="fas fa-certificate text-gold"></i> YDS
                 </div>
-                <div class="flex items-center gap-2 font-serif font-bold text-navy text-xl">
+                <div class="flex items-center gap-2 font-serif font-bold text-navy text-xl hover:text-gold transition-colors">
                     <i class="fas fa-certificate text-gold"></i> Cambridge
                 </div>
-                <div class="flex items-center gap-2 font-serif font-bold text-navy text-xl">
+                <div class="flex items-center gap-2 font-serif font-bold text-navy text-xl hover:text-gold transition-colors">
                     <i class="fas fa-certificate text-gold"></i> PTE
                 </div>
             </div>
@@ -491,16 +574,16 @@
         <div class="container mx-auto px-6">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="relative">
-                    <div class="absolute -top-6 -left-6 w-32 h-32 bg-gold/10 rounded-2xl"></div>
+                    <div class="absolute -top-6 -left-6 w-32 h-32 bg-gold/10 rounded-2xl animate-pulse"></div>
                     <div class="absolute -bottom-6 -right-6 w-40 h-40 bg-navy/5 rounded-full"></div>
                     
-                    <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl group">
                         <img src="image copy.png" 
-                             alt="Mohammed Teaching" class="w-full h-[550px] object-cover">
+                             alt="Mohammed Teaching" class="w-full h-[550px] object-cover group-hover:scale-105 transition-transform duration-700">
                         
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy to-transparent p-8">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy via-navy/80 to-transparent p-8">
                             <div class="flex items-center gap-4">
-                                <div class="w-14 h-14 bg-gold rounded-xl flex items-center justify-center text-navy">
+                                <div class="w-14 h-14 bg-gold rounded-xl flex items-center justify-center text-navy shadow-lg">
                                     <i class="fas fa-award text-2xl"></i>
                                 </div>
                                 <div>
@@ -513,7 +596,7 @@
                     </div>
 
                     <!-- Floating card -->
-                    <div class="absolute -bottom-8 -right-4 md:right-8 bg-white p-6 rounded-2xl shadow-xl max-w-xs border border-gray-100">
+                    <div class="absolute -bottom-8 -right-4 md:right-8 bg-white p-6 rounded-2xl shadow-xl max-w-xs border border-gray-100 animate-float">
                         <div class="flex items-center gap-1 text-gold mb-2">
                             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                         </div>
@@ -524,8 +607,11 @@
                 </div>
 
                 <div>
-                    <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm" data-lang="en">About Mohammed</div>
-                    <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm hidden" data-lang="tr">Mohammed Hakkında</div>
+                    <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm flex items-center gap-2">
+                        <span class="w-6 h-0.5 bg-gold"></span>
+                        <span data-lang="en">About Mohammed</span>
+                        <span data-lang="tr" class="hidden">Mohammed Hakkında</span>
+                    </div>
                     
                     <h2 class="text-4xl md:text-5xl font-serif font-bold text-navy mb-6 leading-tight">
                         <span data-lang="en">Passionate About Your <span class="text-gold">English Success</span></span>
@@ -538,8 +624,8 @@
                     </p>
 
                     <div class="grid sm:grid-cols-2 gap-6 mb-8">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0">
+                        <div class="flex items-start gap-4 p-3 rounded-xl hover:bg-cream transition-colors">
+                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-bullseye text-lg"></i>
                             </div>
                             <div>
@@ -549,8 +635,8 @@
                                 <p class="text-slate-warm text-sm hidden" data-lang="tr">IELTS, TOEFL ve YDS için sınav odaklı stratejiler</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0">
+                        <div class="flex items-start gap-4 p-3 rounded-xl hover:bg-cream transition-colors">
+                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-user-friends text-lg"></i>
                             </div>
                             <div>
@@ -560,8 +646,8 @@
                                 <p class="text-slate-warm text-sm hidden" data-lang="tr">Seviyenize ve hedeflerinize göre uyarlanmış dersler</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0">
+                        <div class="flex items-start gap-4 p-3 rounded-xl hover:bg-cream transition-colors">
+                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-laptop text-lg"></i>
                             </div>
                             <div>
@@ -571,8 +657,8 @@
                                 <p class="text-slate-warm text-sm hidden" data-lang="tr">Online veya yüz yüze, bireysel veya grup</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0">
+                        <div class="flex items-start gap-4 p-3 rounded-xl hover:bg-cream transition-colors">
+                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-chart-line text-lg"></i>
                             </div>
                             <div>
@@ -584,11 +670,11 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-4 p-6 bg-cream rounded-2xl border border-gray-100">
+                    <div class="flex items-center gap-4 p-6 bg-cream rounded-2xl border border-gray-100 hover:border-gold/30 transition-colors shadow-sm">
                         <img src="image copy.png" 
-                             class="w-14 h-14 rounded-full object-cover border-2 border-gold">
+                             class="w-14 h-14 rounded-full object-cover border-2 border-gold shadow-md">
                         <div>
-                            <p class="text-navy font-bold">Mohammed</p>
+                            <p class="text-navy font-bold text-lg">Mohammed</p>
                             <p class="text-slate-warm text-sm" data-lang="en">CELTA Certified · MA TESOL · IELTS Examiner</p>
                             <p class="text-slate-warm text-sm hidden" data-lang="tr">CELTA Sertifikalı · MA TESOL · IELTS Sınav Gözetmeni</p>
                         </div>
@@ -602,69 +688,75 @@
     <section class="py-20 bg-navy text-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm" data-lang="en">All Levels Welcome</div>
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm hidden" data-lang="tr">Tüm Seviyeler Hoş Geldiniz</div>
+                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                    <span data-lang="en">All Levels Welcome</span>
+                    <span data-lang="tr" class="hidden">Tüm Seviyeler Hoş Geldiniz</span>
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                </div>
                 <h2 class="text-4xl font-serif font-bold mb-4">
                     <span data-lang="en">From Beginner to <span class="text-gold">Mastery</span></span>
                     <span data-lang="tr" class="hidden">Başlangıçtan <span class="text-gold">Ustalığa</span></span>
                 </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto" data-lang="en">Choose your path and progress through each level with confidence.</p>
+                <p class="text-gray-400 max-w-2xl mx-auto hidden" data-lang="tr">Kendi yolunuzu seçin ve her seviyede güvenle ilerleyin.</p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-gold/50 transition-all group">
-                    <div class="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center text-green-400 mb-4 text-2xl">
+                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-gold/50 transition-all group hover:bg-white/10">
+                    <div class="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center text-green-400 mb-4 text-2xl group-hover:scale-110 transition-transform">
                         <i class="fas fa-seedling"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2" data-lang="en">Beginner (A1-A2)</h3>
                     <h3 class="text-xl font-bold mb-2 hidden" data-lang="tr">Başlangıç (A1-A2)</h3>
                     <p class="text-gray-400 text-sm mb-4" data-lang="en">Build a solid foundation in grammar, vocabulary, and basic communication.</p>
                     <p class="text-gray-400 text-sm mb-4 hidden" data-lang="tr">Dilbilgisi, kelime haznesi ve temel iletişimde sağlam bir temel oluşturun.</p>
-                    <div class="flex items-center gap-2 text-gold text-sm font-semibold">
+                    <div class="flex items-center gap-2 text-gold text-sm font-semibold group-hover:gap-3 transition-all">
                         <span data-lang="en">Start Here</span>
                         <span data-lang="tr" class="hidden">Buradan Başla</span>
                         <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
 
-                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-gold/50 transition-all group">
-                    <div class="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 mb-4 text-2xl">
+                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-gold/50 transition-all group hover:bg-white/10">
+                    <div class="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 mb-4 text-2xl group-hover:scale-110 transition-transform">
                         <i class="fas fa-book-reader"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2" data-lang="en">Intermediate (B1-B2)</h3>
                     <h3 class="text-xl font-bold mb-2 hidden" data-lang="tr">Orta (B1-B2)</h3>
                     <p class="text-gray-400 text-sm mb-4" data-lang="en">Develop fluency, complex structures, and confident conversation skills.</p>
                     <p class="text-gray-400 text-sm mb-4 hidden" data-lang="tr">Akıcılık, karmaşık yapılar ve kendinden emin konuşma becerileri geliştirin.</p>
-                    <div class="flex items-center gap-2 text-gold text-sm font-semibold">
+                    <div class="flex items-center gap-2 text-gold text-sm font-semibold group-hover:gap-3 transition-all">
                         <span data-lang="en">Level Up</span>
                         <span data-lang="tr" class="hidden">Seviye Atla</span>
                         <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
 
-                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-gold/50 transition-all group">
-                    <div class="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 mb-4 text-2xl">
+                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-gold/50 transition-all group hover:bg-white/10">
+                    <div class="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 mb-4 text-2xl group-hover:scale-110 transition-transform">
                         <i class="fas fa-brain"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2" data-lang="en">Advanced (C1-C2)</h3>
                     <h3 class="text-xl font-bold mb-2 hidden" data-lang="tr">İleri (C1-C2)</h3>
                     <p class="text-gray-400 text-sm mb-4" data-lang="en">Refine nuance, academic writing, and native-level comprehension.</p>
                     <p class="text-gray-400 text-sm mb-4 hidden" data-lang="tr">İnce ayrıntıları, akademik yazıyı ve anadili düzeyinde anlamayı geliştirin.</p>
-                    <div class="flex items-center gap-2 text-gold text-sm font-semibold">
+                    <div class="flex items-center gap-2 text-gold text-sm font-semibold group-hover:gap-3 transition-all">
                         <span data-lang="en">Master It</span>
                         <span data-lang="tr" class="hidden">Ustalaş</span>
                         <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
 
-                <div class="bg-gold/10 backdrop-blur-sm rounded-2xl p-6 border border-gold/30 hover:border-gold transition-all group">
-                    <div class="w-14 h-14 bg-gold/20 rounded-xl flex items-center justify-center text-gold mb-4 text-2xl">
+                <div class="bg-gold/10 backdrop-blur-sm rounded-2xl p-6 border border-gold/30 hover:border-gold transition-all group hover:bg-gold/15">
+                    <div class="w-14 h-14 bg-gold/20 rounded-xl flex items-center justify-center text-gold mb-4 text-2xl group-hover:scale-110 transition-transform">
                         <i class="fas fa-trophy"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2 text-gold" data-lang="en">Exam Prep</h3>
                     <h3 class="text-xl font-bold mb-2 text-gold hidden" data-lang="tr">Sınav Hazırlığı</h3>
                     <p class="text-gray-300 text-sm mb-4" data-lang="en">IELTS, TOEFL, YDS, Cambridge — targeted strategies for top scores.</p>
                     <p class="text-gray-300 text-sm mb-4 hidden" data-lang="tr">IELTS, TOEFL, YDS, Cambridge — en yüksek puanlar için hedefli stratejiler.</p>
-                    <div class="flex items-center gap-2 text-gold text-sm font-semibold">
+                    <div class="flex items-center gap-2 text-gold text-sm font-semibold group-hover:gap-3 transition-all">
                         <span data-lang="en">Ace the Test</span>
                         <span data-lang="tr" class="hidden">Sınavı Geç</span>
                         <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
@@ -678,8 +770,12 @@
     <section id="exams" class="py-24 bg-cream">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm" data-lang="en">Exam Preparation</div>
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm hidden" data-lang="tr">Sınav Hazırlığı</div>
+                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                    <span data-lang="en">Exam Preparation</span>
+                    <span data-lang="tr" class="hidden">Sınav Hazırlığı</span>
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                </div>
                 <h2 class="text-4xl font-serif font-bold text-navy mb-4">
                     <span data-lang="en">Target Your <span class="text-gold">Dream Score</span></span>
                     <span data-lang="tr" class="hidden">Hayalinizdeki <span class="text-gold">Puanı</span> Hedefleyin</span>
@@ -698,32 +794,32 @@
                             <span class="text-white/10 text-8xl font-serif font-bold">IELTS</span>
                         </div>
                         <div class="absolute bottom-0 left-0 right-0 p-6">
-                            <div class="exam-badge inline-block px-4 py-1 rounded-full text-sm font-bold mb-2">BAND 7+</div>
+                            <div class="exam-badge inline-block px-4 py-1 rounded-full text-sm font-bold mb-2 shadow-lg">BAND 7+</div>
                             <h3 class="text-2xl font-bold text-white">IELTS Preparation</h3>
                         </div>
                     </div>
                     <div class="p-6">
                         <div class="flex items-center gap-4 mb-4 text-sm text-slate-warm">
-                            <span><i class="far fa-clock mr-1"></i> 8-12 weeks</span>
-                            <span><i class="fas fa-users mr-1"></i> 1-on-1 or Group</span>
+                            <span class="flex items-center gap-1"><i class="far fa-clock text-gold"></i> 8-12 weeks</span>
+                            <span class="flex items-center gap-1"><i class="fas fa-users text-gold"></i> 1-on-1 or Group</span>
                         </div>
                         <ul class="space-y-3 mb-6">
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">All 4 modules: Listening, Reading, Writing, Speaking</span>
                                 <span data-lang="tr" class="hidden">4 modülün tamamı: Dinleme, Okuma, Yazma, Konuşma</span>
                             </li>
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">Academic & General Training tracks</span>
                                 <span data-lang="tr" class="hidden">Akademik ve Genel Eğitim kolları</span>
                             </li>
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">Mock tests with detailed feedback</span>
                                 <span data-lang="tr" class="hidden">Detaylı geri bildirimli deneme sınavları</span>
                             </li>
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">Writing task strategies & templates</span>
                                 <span data-lang="tr" class="hidden">Yazma görevi stratejileri ve şablonları</span>
@@ -734,7 +830,7 @@
                                 <span class="text-2xl font-bold text-navy">$299</span>
                                 <span class="text-slate-warm text-sm">/month</span>
                             </div>
-                            <a href="#booking" class="bg-navy text-white px-6 py-2.5 rounded-full font-semibold hover:bg-gold hover:text-navy transition-all text-sm">
+                            <a href="#booking" class="bg-navy text-white px-6 py-2.5 rounded-full font-semibold hover:bg-gold hover:text-navy transition-all text-sm hover:shadow-lg">
                                 <span data-lang="en">Enroll</span>
                                 <span data-lang="tr" class="hidden">Kaydol</span>
                             </a>
@@ -749,32 +845,32 @@
                             <span class="text-white/10 text-7xl font-serif font-bold">TOEFL</span>
                         </div>
                         <div class="absolute bottom-0 left-0 right-0 p-6">
-                            <div class="exam-badge inline-block px-4 py-1 rounded-full text-sm font-bold mb-2">100+ SCORE</div>
+                            <div class="exam-badge inline-block px-4 py-1 rounded-full text-sm font-bold mb-2 shadow-lg">100+ SCORE</div>
                             <h3 class="text-2xl font-bold text-white">TOEFL iBT Prep</h3>
                         </div>
                     </div>
                     <div class="p-6">
                         <div class="flex items-center gap-4 mb-4 text-sm text-slate-warm">
-                            <span><i class="far fa-clock mr-1"></i> 6-10 weeks</span>
-                            <span><i class="fas fa-users mr-1"></i> 1-on-1 or Group</span>
+                            <span class="flex items-center gap-1"><i class="far fa-clock text-gold"></i> 6-10 weeks</span>
+                            <span class="flex items-center gap-1"><i class="fas fa-users text-gold"></i> 1-on-1 or Group</span>
                         </div>
                         <ul class="space-y-3 mb-6">
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">Integrated skills: Reading, Listening, Speaking, Writing</span>
                                 <span data-lang="tr" class="hidden">Bütünleşik beceriler: Okuma, Dinleme, Konuşma, Yazma</span>
                             </li>
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">iBT format mastery & time management</span>
                                 <span data-lang="tr" class="hidden">iBT format ustalığı ve zaman yönetimi</span>
                             </li>
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">Speaking section practice & recording review</span>
                                 <span data-lang="tr" class="hidden">Konuşma bölümü pratiği ve kayıt incelemesi</span>
                             </li>
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">Essay structure & academic vocabulary</span>
                                 <span data-lang="tr" class="hidden">Makale yapısı ve akademik kelime haznesi</span>
@@ -785,7 +881,7 @@
                                 <span class="text-2xl font-bold text-navy">$279</span>
                                 <span class="text-slate-warm text-sm">/month</span>
                             </div>
-                            <a href="#booking" class="bg-navy text-white px-6 py-2.5 rounded-full font-semibold hover:bg-gold hover:text-navy transition-all text-sm">
+                            <a href="#booking" class="bg-navy text-white px-6 py-2.5 rounded-full font-semibold hover:bg-gold hover:text-navy transition-all text-sm hover:shadow-lg">
                                 <span data-lang="en">Enroll</span>
                                 <span data-lang="tr" class="hidden">Kaydol</span>
                             </a>
@@ -800,32 +896,32 @@
                             <span class="text-white/10 text-8xl font-serif font-bold">YDS</span>
                         </div>
                         <div class="absolute bottom-0 left-0 right-0 p-6">
-                            <div class="exam-badge inline-block px-4 py-1 rounded-full text-sm font-bold mb-2">85+ SCORE</div>
+                            <div class="exam-badge inline-block px-4 py-1 rounded-full text-sm font-bold mb-2 shadow-lg">85+ SCORE</div>
                             <h3 class="text-2xl font-bold text-white">YDS Preparation</h3>
                         </div>
                     </div>
                     <div class="p-6">
                         <div class="flex items-center gap-4 mb-4 text-sm text-slate-warm">
-                            <span><i class="far fa-clock mr-1"></i> 10-16 weeks</span>
-                            <span><i class="fas fa-users mr-1"></i> 1-on-1 or Group</span>
+                            <span class="flex items-center gap-1"><i class="far fa-clock text-gold"></i> 10-16 weeks</span>
+                            <span class="flex items-center gap-1"><i class="fas fa-users text-gold"></i> 1-on-1 or Group</span>
                         </div>
                         <ul class="space-y-3 mb-6">
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">Turkish government exam format expertise</span>
                                 <span data-lang="tr" class="hidden">Türk devlet sınavı formatı uzmanlığı</span>
                             </li>
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">Vocabulary & grammar intensive modules</span>
                                 <span data-lang="tr" class="hidden">Kelime ve dilbilgisi yoğun modüller</span>
                             </li>
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">Translation techniques: EN→TR & TR→EN</span>
                                 <span data-lang="tr" class="hidden">Çeviri teknikleri: İN→TR & TR→İN</span>
                             </li>
-                            <li class="flex items-start gap-3 text-sm">
+                            <li class="flex items-start gap-3 text-sm hover:text-navy transition-colors">
                                 <i class="fas fa-check text-green-500 mt-1"></i>
                                 <span data-lang="en">Past exam analysis & question banks</span>
                                 <span data-lang="tr" class="hidden">Geçmiş sınav analizi ve soru bankaları</span>
@@ -836,7 +932,7 @@
                                 <span class="text-2xl font-bold text-navy">$249</span>
                                 <span class="text-slate-warm text-sm">/month</span>
                             </div>
-                            <a href="#booking" class="bg-navy text-white px-6 py-2.5 rounded-full font-semibold hover:bg-gold hover:text-navy transition-all text-sm">
+                            <a href="#booking" class="bg-navy text-white px-6 py-2.5 rounded-full font-semibold hover:bg-gold hover:text-navy transition-all text-sm hover:shadow-lg">
                                 <span data-lang="en">Enroll</span>
                                 <span data-lang="tr" class="hidden">Kaydol</span>
                             </a>
@@ -851,10 +947,10 @@
                     <span data-lang="en">Need general English lessons instead?</span>
                     <span data-lang="tr" class="hidden">Genel İngilizce derslerine mi ihtiyacınız var?</span>
                 </p>
-                <a href="#booking" class="inline-flex items-center gap-2 text-navy font-bold hover:text-gold transition-colors border-b-2 border-gold pb-1">
+                <a href="#booking" class="inline-flex items-center gap-2 text-navy font-bold hover:text-gold transition-colors border-b-2 border-gold pb-1 group">
                     <span data-lang="en">View General English Programs</span>
                     <span data-lang="tr" class="hidden">Genel İngilizce Programlarını Gör</span>
-                    <i class="fas fa-arrow-right"></i>
+                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                 </a>
             </div>
         </div>
@@ -864,8 +960,12 @@
     <section id="results" class="py-20 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm" data-lang="en">Proven Results</div>
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm hidden" data-lang="tr">Kanıtlanmış Sonuçlar</div>
+                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                    <span data-lang="en">Proven Results</span>
+                    <span data-lang="tr" class="hidden">Kanıtlanmış Sonuçlar</span>
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                </div>
                 <h2 class="text-4xl font-serif font-bold text-navy mb-4">
                     <span data-lang="en">Student <span class="text-gold">Success Stories</span></span>
                     <span data-lang="tr" class="hidden">Öğrenci <span class="text-gold">Başarı Hikayeleri</span></span>
@@ -873,25 +973,25 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-                <div class="text-center p-8 bg-cream rounded-2xl border border-gray-100">
+                <div class="stat-card text-center p-8 bg-cream rounded-2xl border border-gray-100 hover:border-gold/30 shadow-sm hover:shadow-xl">
                     <div class="text-5xl font-serif font-bold text-navy mb-2 score-number" data-target="500">500+</div>
-                    <div class="text-slate-warm" data-lang="en">Students Taught</div>
-                    <div class="text-slate-warm hidden" data-lang="tr">Öğretilen Öğrenci</div>
+                    <div class="text-slate-warm text-sm" data-lang="en">Students Taught</div>
+                    <div class="text-slate-warm text-sm hidden" data-lang="tr">Öğretilen Öğrenci</div>
                 </div>
-                <div class="text-center p-8 bg-cream rounded-2xl border border-gray-100">
+                <div class="stat-card text-center p-8 bg-cream rounded-2xl border border-gray-100 hover:border-gold/30 shadow-sm hover:shadow-xl">
                     <div class="text-5xl font-serif font-bold text-gold mb-2 score-number">95%</div>
-                    <div class="text-slate-warm" data-lang="en">Exam Pass Rate</div>
-                    <div class="text-slate-warm hidden" data-lang="tr">Sınav Geçme Oranı</div>
+                    <div class="text-slate-warm text-sm" data-lang="en">Exam Pass Rate</div>
+                    <div class="text-slate-warm text-sm hidden" data-lang="tr">Sınav Geçme Oranı</div>
                 </div>
-                <div class="text-center p-8 bg-cream rounded-2xl border border-gray-100">
+                <div class="stat-card text-center p-8 bg-cream rounded-2xl border border-gray-100 hover:border-gold/30 shadow-sm hover:shadow-xl">
                     <div class="text-5xl font-serif font-bold text-navy mb-2 score-number">7.5</div>
-                    <div class="text-slate-warm" data-lang="en">Avg IELTS Band</div>
-                    <div class="text-slate-warm hidden" data-lang="tr">Ort. IELTS Puanı</div>
+                    <div class="text-slate-warm text-sm" data-lang="en">Avg IELTS Band</div>
+                    <div class="text-slate-warm text-sm hidden" data-lang="tr">Ort. IELTS Puanı</div>
                 </div>
-                <div class="text-center p-8 bg-cream rounded-2xl border border-gray-100">
+                <div class="stat-card text-center p-8 bg-cream rounded-2xl border border-gray-100 hover:border-gold/30 shadow-sm hover:shadow-xl">
                     <div class="text-5xl font-serif font-bold text-gold mb-2 score-number">4.9</div>
-                    <div class="text-slate-warm" data-lang="en">Student Rating</div>
-                    <div class="text-slate-warm hidden" data-lang="tr">Öğrenci Puanı</div>
+                    <div class="text-slate-warm text-sm" data-lang="en">Student Rating</div>
+                    <div class="text-slate-warm text-sm hidden" data-lang="tr">Öğrenci Puanı</div>
                 </div>
             </div>
 
@@ -901,13 +1001,13 @@
                 <h3 class="text-2xl font-bold text-navy text-center mb-8 hidden" data-lang="tr">Gerçek Puan İyileştirmeleri</h3>
                 
                 <div class="space-y-6">
-                    <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-                        <div class="flex items-center justify-between mb-3">
+                    <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold text-sm">IELTS</div>
                                 <span class="font-semibold text-navy">Mehmet K. — Samsun</span>
                             </div>
-                            <span class="text-green-600 font-bold bg-green-50 px-3 py-1 rounded-full text-sm">+1.5 Band</span>
+                            <span class="text-green-600 font-bold bg-green-50 px-3 py-1 rounded-full text-sm border border-green-200">+1.5 Band</span>
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="flex-1">
@@ -924,13 +1024,13 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-                        <div class="flex items-center justify-between mb-3">
+                    <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">TOEFL</div>
                                 <span class="font-semibold text-navy">Ayşe D. — Ankara</span>
                             </div>
-                            <span class="text-green-600 font-bold bg-green-50 px-3 py-1 rounded-full text-sm">+22 Points</span>
+                            <span class="text-green-600 font-bold bg-green-50 px-3 py-1 rounded-full text-sm border border-green-200">+22 Points</span>
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="flex-1">
@@ -947,13 +1047,13 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-                        <div class="flex items-center justify-between mb-3">
+                    <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold text-sm">YDS</div>
                                 <span class="font-semibold text-navy">Can Y. — Izmir</span>
                             </div>
-                            <span class="text-green-600 font-bold bg-green-50 px-3 py-1 rounded-full text-sm">+30 Points</span>
+                            <span class="text-green-600 font-bold bg-green-50 px-3 py-1 rounded-full text-sm border border-green-200">+30 Points</span>
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="flex-1">
@@ -978,8 +1078,12 @@
     <section id="testimonials" class="py-20 bg-navy text-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm" data-lang="en">Testimonials</div>
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm hidden" data-lang="tr">Yorumlar</div>
+                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                    <span data-lang="en">Testimonials</span>
+                    <span data-lang="tr" class="hidden">Yorumlar</span>
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                </div>
                 <h2 class="text-4xl font-serif font-bold mb-4">
                     <span data-lang="en">What Students <span class="text-gold">Say</span></span>
                     <span data-lang="tr" class="hidden">Öğrenciler <span class="text-gold">Ne Diyor</span></span>
@@ -987,10 +1091,11 @@
             </div>
 
             <div class="max-w-4xl mx-auto relative">
-                <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-white/10">
+                <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-white/10 relative">
+                    <div class="absolute top-6 right-8 text-6xl text-gold/10 font-serif">"</div>
                     <!-- Testimonial 1 -->
                     <div class="testimonial-slide active text-center">
-                        <div class="w-20 h-20 mx-auto mb-6 rounded-full overflow-hidden border-4 border-gold">
+                        <div class="w-20 h-20 mx-auto mb-6 rounded-full overflow-hidden border-4 border-gold shadow-lg">
                             <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" 
                                  alt="Student" class="w-full h-full object-cover">
                         </div>
@@ -1007,7 +1112,7 @@
 
                     <!-- Testimonial 2 -->
                     <div class="testimonial-slide text-center">
-                        <div class="w-20 h-20 mx-auto mb-6 rounded-full overflow-hidden border-4 border-gold">
+                        <div class="w-20 h-20 mx-auto mb-6 rounded-full overflow-hidden border-4 border-gold shadow-lg">
                             <img src="image copy.png" 
                                  alt="Student" class="w-full h-full object-cover">
                         </div>
@@ -1024,7 +1129,7 @@
 
                     <!-- Testimonial 3 -->
                     <div class="testimonial-slide text-center">
-                        <div class="w-20 h-20 mx-auto mb-6 rounded-full overflow-hidden border-4 border-gold">
+                        <div class="w-20 h-20 mx-auto mb-6 rounded-full overflow-hidden border-4 border-gold shadow-lg">
                             <img src="r.jpg" 
                                  alt="Student" class="w-full h-full object-cover">
                         </div>
@@ -1041,10 +1146,10 @@
                 </div>
 
                 <div class="flex justify-center gap-4 mt-8">
-                    <button onclick="changeTestimonial(-1)" class="w-12 h-12 rounded-full bg-white/10 text-white hover:bg-gold hover:text-navy transition-all border border-white/20">
+                    <button onclick="changeTestimonial(-1)" class="w-12 h-12 rounded-full bg-white/10 text-white hover:bg-gold hover:text-navy transition-all border border-white/20 hover:border-gold">
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <button onclick="changeTestimonial(1)" class="w-12 h-12 rounded-full bg-white/10 text-white hover:bg-gold hover:text-navy transition-all border border-white/20">
+                    <button onclick="changeTestimonial(1)" class="w-12 h-12 rounded-full bg-white/10 text-white hover:bg-gold hover:text-navy transition-all border border-white/20 hover:border-gold">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
@@ -1056,8 +1161,12 @@
     <section class="py-20 bg-cream">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm" data-lang="en">Free Resources</div>
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm hidden" data-lang="tr">Ücretsiz Kaynaklar</div>
+                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                    <span data-lang="en">Free Resources</span>
+                    <span data-lang="tr" class="hidden">Ücretsiz Kaynaklar</span>
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                </div>
                 <h2 class="text-4xl font-serif font-bold text-navy mb-4">
                     <span data-lang="en">Start Learning <span class="text-gold">Today</span></span>
                     <span data-lang="tr" class="hidden">Bugün <span class="text-gold">Öğrenmeye</span> Başla</span>
@@ -1065,7 +1174,7 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center group hover:border-gold transition-all">
+                <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center group hover:border-gold transition-all hover:shadow-xl">
                     <div class="w-16 h-16 bg-gold-light rounded-2xl flex items-center justify-center text-gold text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-file-pdf"></i>
                     </div>
@@ -1073,13 +1182,14 @@
                     <h3 class="text-xl font-bold text-navy mb-2 hidden" data-lang="tr">IELTS Yazma Rehberi</h3>
                     <p class="text-slate-warm text-sm mb-4" data-lang="en">Task 1 & 2 templates, band descriptors, and sample essays.</p>
                     <p class="text-slate-warm text-sm mb-4 hidden" data-lang="tr">Görev 1 ve 2 şablonları, band tanımlayıcıları ve örnek makaleler.</p>
-                    <button class="text-gold font-semibold hover:text-navy transition-colors text-sm">
-                        <span data-lang="en">Download Free →</span>
-                        <span data-lang="tr" class="hidden">Ücretsiz İndir →</span>
+                    <button class="text-gold font-semibold hover:text-navy transition-colors text-sm group-hover:gap-2 inline-flex items-center gap-1">
+                        <span data-lang="en">Download Free</span>
+                        <span data-lang="tr" class="hidden">Ücretsiz İndir</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </button>
                 </div>
 
-                <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center group hover:border-gold transition-all">
+                <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center group hover:border-gold transition-all hover:shadow-xl">
                     <div class="w-16 h-16 bg-gold-light rounded-2xl flex items-center justify-center text-gold text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-headphones"></i>
                     </div>
@@ -1087,13 +1197,14 @@
                     <h3 class="text-xl font-bold text-navy mb-2 hidden" data-lang="tr">Dinleme Pratik Paketi</h3>
                     <p class="text-slate-warm text-sm mb-4" data-lang="en">10 authentic practice tests with transcripts and answer keys.</p>
                     <p class="text-slate-warm text-sm mb-4 hidden" data-lang="tr">Transkriptler ve cevap anahtarlarıyla 10 özgün pratik test.</p>
-                    <button class="text-gold font-semibold hover:text-navy transition-colors text-sm">
-                        <span data-lang="en">Download Free →</span>
-                        <span data-lang="tr" class="hidden">Ücretsiz İndir →</span>
+                    <button class="text-gold font-semibold hover:text-navy transition-colors text-sm group-hover:gap-2 inline-flex items-center gap-1">
+                        <span data-lang="en">Download Free</span>
+                        <span data-lang="tr" class="hidden">Ücretsiz İndir</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </button>
                 </div>
 
-                <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center group hover:border-gold transition-all">
+                <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center group hover:border-gold transition-all hover:shadow-xl">
                     <div class="w-16 h-16 bg-gold-light rounded-2xl flex items-center justify-center text-gold text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-vocabulary"></i>
                     </div>
@@ -1101,9 +1212,10 @@
                     <h3 class="text-xl font-bold text-navy mb-2 hidden" data-lang="tr">Akademik Kelime Listesi</h3>
                     <p class="text-slate-warm text-sm mb-4" data-lang="en">500 essential words for IELTS, TOEFL & YDS with definitions.</p>
                     <p class="text-slate-warm text-sm mb-4 hidden" data-lang="tr">Tanımlarıyla IELTS, TOEFL ve YDS için 500 temel kelime.</p>
-                    <button class="text-gold font-semibold hover:text-navy transition-colors text-sm">
-                        <span data-lang="en">Download Free →</span>
-                        <span data-lang="tr" class="hidden">Ücretsiz İndir →</span>
+                    <button class="text-gold font-semibold hover:text-navy transition-colors text-sm group-hover:gap-2 inline-flex items-center gap-1">
+                        <span data-lang="en">Download Free</span>
+                        <span data-lang="tr" class="hidden">Ücretsiz İndir</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </button>
                 </div>
             </div>
@@ -1115,8 +1227,11 @@
         <div class="container mx-auto px-6">
             <div class="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
                 <div>
-                    <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm" data-lang="en">Book a Class</div>
-                    <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm hidden" data-lang="tr">Ders Rezervasyonu</div>
+                    <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm flex items-center gap-2">
+                        <span class="w-6 h-0.5 bg-gold"></span>
+                        <span data-lang="en">Book a Class</span>
+                        <span data-lang="tr" class="hidden">Ders Rezervasyonu</span>
+                    </div>
                     <h2 class="text-4xl md:text-5xl font-serif font-bold text-navy mb-6 leading-tight">
                         <span data-lang="en">Your First Lesson is <span class="text-gold">Free</span></span>
                         <span data-lang="tr" class="hidden">İlk Dersiniz <span class="text-gold">Ücretsiz</span></span>
@@ -1127,8 +1242,8 @@
                     </p>
 
                     <div class="space-y-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0">
+                        <div class="flex items-start gap-4 group">
+                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-video text-lg"></i>
                             </div>
                             <div>
@@ -1138,8 +1253,8 @@
                                 <p class="text-slate-warm text-sm hidden" data-lang="tr">HD video ve interaktif beyaz tahta ile her yerden öğrenin</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0">
+                        <div class="flex items-start gap-4 group">
+                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-building text-lg"></i>
                             </div>
                             <div>
@@ -1149,8 +1264,8 @@
                                 <p class="text-slate-warm text-sm hidden" data-lang="tr">Samsun'ta modern sınıflar</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0">
+                        <div class="flex items-start gap-4 group">
+                            <div class="w-12 h-12 bg-gold-light rounded-xl flex items-center justify-center text-gold flex-shrink-0 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-calendar-check text-lg"></i>
                             </div>
                             <div>
@@ -1163,7 +1278,7 @@
                     </div>
                 </div>
 
-                <div class="bg-cream rounded-3xl p-8 md:p-10 shadow-xl border border-gray-100">
+                <div class="bg-cream rounded-3xl p-8 md:p-10 shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow">
                     <form onsubmit="handleBooking(event)" class="space-y-5">
                         <div class="grid md:grid-cols-2 gap-5">
                             <div>
@@ -1250,8 +1365,12 @@
     <section class="py-20 bg-cream">
         <div class="container mx-auto px-6 max-w-4xl">
             <div class="text-center mb-16">
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm" data-lang="en">FAQ</div>
-                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm hidden" data-lang="tr">SSS</div>
+                <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                    <span data-lang="en">FAQ</span>
+                    <span data-lang="tr" class="hidden">SSS</span>
+                    <span class="w-8 h-0.5 bg-gold"></span>
+                </div>
                 <h2 class="text-4xl font-serif font-bold text-navy">
                     <span data-lang="en">Common Questions</span>
                     <span data-lang="tr" class="hidden">Sık Sorulan Sorular</span>
@@ -1259,11 +1378,11 @@
             </div>
 
             <div class="space-y-4">
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-                    <button onclick="toggleAccordion(this)" class="w-full px-6 py-5 text-left flex justify-between items-center font-bold text-navy hover:bg-gold-light/30 transition-colors">
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:border-gold/30 transition-colors">
+                    <button onclick="toggleAccordion(this)" class="accordion-trigger w-full px-6 py-5 text-left flex justify-between items-center font-bold text-navy hover:bg-gold-light/30 transition-colors">
                         <span data-lang="en">How long does it take to prepare for IELTS/TOEFL?</span>
                         <span data-lang="tr" class="hidden">IELTS/TOEFL hazırlığı ne kadar sürer?</span>
-                        <i class="fas fa-chevron-down text-gold transition-transform"></i>
+                        <i class="fas fa-chevron-down text-gold transition-transform duration-300"></i>
                     </button>
                     <div class="accordion-content px-6">
                         <p class="pb-5 text-slate-warm leading-relaxed">
@@ -1273,11 +1392,11 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-                    <button onclick="toggleAccordion(this)" class="w-full px-6 py-5 text-left flex justify-between items-center font-bold text-navy hover:bg-gold-light/30 transition-colors">
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:border-gold/30 transition-colors">
+                    <button onclick="toggleAccordion(this)" class="accordion-trigger w-full px-6 py-5 text-left flex justify-between items-center font-bold text-navy hover:bg-gold-light/30 transition-colors">
                         <span data-lang="en">Are classes online or in-person?</span>
                         <span data-lang="tr" class="hidden">Dersler online mı yoksa yüz yüze mi?</span>
-                        <i class="fas fa-chevron-down text-gold transition-transform"></i>
+                        <i class="fas fa-chevron-down text-gold transition-transform duration-300"></i>
                     </button>
                     <div class="accordion-content px-6">
                         <p class="pb-5 text-slate-warm leading-relaxed">
@@ -1287,11 +1406,11 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-                    <button onclick="toggleAccordion(this)" class="w-full px-6 py-5 text-left flex justify-between items-center font-bold text-navy hover:bg-gold-light/30 transition-colors">
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:border-gold/30 transition-colors">
+                    <button onclick="toggleAccordion(this)" class="accordion-trigger w-full px-6 py-5 text-left flex justify-between items-center font-bold text-navy hover:bg-gold-light/30 transition-colors">
                         <span data-lang="en">What materials do I need?</span>
                         <span data-lang="tr" class="hidden">Hangi materyallere ihtiyacım var?</span>
-                        <i class="fas fa-chevron-down text-gold transition-transform"></i>
+                        <i class="fas fa-chevron-down text-gold transition-transform duration-300"></i>
                     </button>
                     <div class="accordion-content px-6">
                         <p class="pb-5 text-slate-warm leading-relaxed">
@@ -1301,11 +1420,11 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-                    <button onclick="toggleAccordion(this)" class="w-full px-6 py-5 text-left flex justify-between items-center font-bold text-navy hover:bg-gold-light/30 transition-colors">
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:border-gold/30 transition-colors">
+                    <button onclick="toggleAccordion(this)" class="accordion-trigger w-full px-6 py-5 text-left flex justify-between items-center font-bold text-navy hover:bg-gold-light/30 transition-colors">
                         <span data-lang="en">How are payments handled?</span>
                         <span data-lang="tr" class="hidden">Ödemeler nasıl yapılır?</span>
-                        <i class="fas fa-chevron-down text-gold transition-transform"></i>
+                        <i class="fas fa-chevron-down text-gold transition-transform duration-300"></i>
                     </button>
                     <div class="accordion-content px-6">
                         <p class="pb-5 text-slate-warm leading-relaxed">
@@ -1315,11 +1434,11 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-                    <button onclick="toggleAccordion(this)" class="w-full px-6 py-5 text-left flex justify-between items-center font-bold text-navy hover:bg-gold-light/30 transition-colors">
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:border-gold/30 transition-colors">
+                    <button onclick="toggleAccordion(this)" class="accordion-trigger w-full px-6 py-5 text-left flex justify-between items-center font-bold text-navy hover:bg-gold-light/30 transition-colors">
                         <span data-lang="en">Can I switch between exam prep and general English?</span>
                         <span data-lang="tr" class="hidden">Sınav hazırlığı ve genel İngilizce arasında geçiş yapabilir miyim?</span>
-                        <i class="fas fa-chevron-down text-gold transition-transform"></i>
+                        <i class="fas fa-chevron-down text-gold transition-transform duration-300"></i>
                     </button>
                     <div class="accordion-content px-6">
                         <p class="pb-5 text-slate-warm leading-relaxed">
@@ -1337,8 +1456,11 @@
         <div class="container mx-auto px-6">
             <div class="grid lg:grid-cols-2 gap-16">
                 <div>
-                    <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm" data-lang="en">Get In Touch</div>
-                    <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm hidden" data-lang="tr">İletişime Geçin</div>
+                    <div class="text-gold font-bold mb-2 uppercase tracking-widest text-sm flex items-center gap-2">
+                        <span class="w-6 h-0.5 bg-gold"></span>
+                        <span data-lang="en">Get In Touch</span>
+                        <span data-lang="tr" class="hidden">İletişime Geçin</span>
+                    </div>
                     <h2 class="text-4xl font-serif font-bold mb-6">
                         <span data-lang="en">Let's Start Your <span class="text-gold">Journey</span></span>
                         <span data-lang="tr" class="hidden"><span class="text-gold">Yolculuğunuza</span> Başlayalım</span>
@@ -1349,8 +1471,8 @@
                     </p>
 
                     <div class="space-y-6 mb-10">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-gold">
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-navy transition-all">
                                 <i class="fab fa-whatsapp text-xl"></i>
                             </div>
                             <div>
@@ -1358,8 +1480,8 @@
                                 <div class="font-bold text-lg">+90 507 202 96 15</div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-gold">
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-navy transition-all">
                                 <i class="fas fa-envelope text-xl"></i>
                             </div>
                             <div>
@@ -1367,8 +1489,8 @@
                                 <div class="font-bold text-lg">Mohammed@englishacademy.com</div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-gold">
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-navy transition-all">
                                 <i class="fas fa-map-marker-alt text-xl"></i>
                             </div>
                             <div>
@@ -1383,23 +1505,23 @@
                         <h4 class="font-bold mb-4 text-gold" data-lang="en">Follow Me</h4>
                         <h4 class="font-bold mb-4 text-gold hidden" data-lang="tr">Takip Edin</h4>
                         <div class="flex gap-4">
-                            <a href="https://www.instagram.com/khlaifacademy" target="_blank" class="w-11 h-11 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-navy transition-all">
+                            <a href="https://www.instagram.com/khlaifacademy" target="_blank" class="social-icon w-11 h-11 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-navy transition-all">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <a href="https://www.youtube.com/@khlaifacademy" target="_blank" class="w-11 h-11 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-navy transition-all">
+                            <a href="https://www.youtube.com/@khlaifacademy" target="_blank" class="social-icon w-11 h-11 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-navy transition-all">
                                 <i class="fab fa-youtube"></i>
                             </a>
-                            <a href="https://www.tiktok.com/@khlaifacademy" target="_blank" class="w-11 h-11 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-navy transition-all">
+                            <a href="https://www.tiktok.com/@khlaifacademy" target="_blank" class="social-icon w-11 h-11 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-navy transition-all">
                                 <i class="fab fa-tiktok"></i>
                             </a>
-                            <a href="https://api.whatsapp.com/send?phone=905072029615" target="_blank" class="w-11 h-11 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-navy transition-all">
+                            <a href="https://api.whatsapp.com/send?phone=905072029615" target="_blank" class="social-icon w-11 h-11 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-navy transition-all">
                                 <i class="fab fa-whatsapp"></i>
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
+                <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-gold/30 transition-colors">
                     <h3 class="text-2xl font-bold mb-6" data-lang="en">Send a Message</h3>
                     <h3 class="text-2xl font-bold mb-6 hidden" data-lang="tr">Mesaj Gönder</h3>
                     <form onsubmit="handleContact(event)" class="space-y-4">
@@ -1412,7 +1534,7 @@
                         <div>
                             <textarea rows="4" required placeholder="Your message..." class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold transition-colors"></textarea>
                         </div>
-                        <button type="submit" class="w-full bg-gold text-navy font-bold py-3 rounded-xl hover:bg-white transition-all">
+                        <button type="submit" class="w-full bg-gold text-navy font-bold py-3 rounded-xl hover:bg-white transition-all hover:shadow-lg">
                             <span data-lang="en">Send Message</span>
                             <span data-lang="tr" class="hidden">Mesaj Gönder</span>
                         </button>
